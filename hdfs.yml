@@ -1,0 +1,35 @@
+##
+# Ansible playbook To Create HDFS Directories.
+#/Users/revanthreddy/Desktop/Notes/ansible/hdfs.yml 
+
+---
+- name: Create HDFS Directories
+  remote_user: revanthreddy
+  hosts: targets
+
+  tasks:
+
+    - name: Check existing HDFS files
+      command: hadoop fs -ls /*
+      become_user: hdfs
+      register: result
+      ignore_errors: true
+    - name: Delete existing HDFS directory
+      command: hadoop fs  -rmr -skipTrash /* 
+      when: result|success
+      become_user: hdfs
+    - name: Create user directory
+      command: hadoop fs -mkdir /user
+      become_user: hdfs
+    - name: Create centos directory
+      command: hadoop fs -mkdir /user/centos
+      become_user: hdfs
+    - name: Change centos ownership
+      command: hadoop fs -chown centos:centos /user/centos
+      become_user: hdfs
+    - name: Create temp directory
+      command: hadoop fs -mkdir /tmp
+      become_user: hdfs
+    - name: Change permissions of temp directory
+      command: hadoop fs -chmod 777 /tmp
+      become_user: hdfs
