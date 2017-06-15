@@ -1,0 +1,35 @@
+##
+# Ansible playbook to Create new DataBase in Postgres.
+#
+
+---
+- name: Create new DataBase in Postgres
+  remote_user: revanthreddy
+  hosts: targets
+  vars:
+    dbname: TestDB
+    dbuser: test
+    dbpassword: test@123
+    postgres_host: localhost
+    postgres_login_user: revanthreddy
+    postgres_login_password: admin@123
+    port: 5432
+    createDB: true
+
+  tasks:
+
+  - name: Install psycopg2 python module
+    pip: name=psycopg2
+    when: createDB
+
+  - name: Ensure database is created
+    postgresql_db: name={{dbname}} encoding='UTF-8'  lc_collate='en_US.UTF-8' lc_ctype='en_US.UTF-8' state=present login_host={{postgres_host}} port={{port}} login_user={{postgres_login_user}} login_password={{postgres_login_password}}
+    when: createDB
+
+  - name: Ensure user has access to database
+    postgresql_user: db={{dbname}} name={{dbuser}} password={{dbpassword}} priv=ALL role_attr_flags=NOSUPERUSER,NOCREATEDB login_host={{postgres_host}} port={{port}} login_user={{postgres_login_user}} login_password={{postgres_login_password}}
+    when: createDB
+
+  - name: Ensure no other user can access the database
+    postgresql_privs: db={{dbname}} role=PUBLIC type=database priv=ALL state=absent login_host={{postgres_host}} port={{port}} login_user={{postgres_login_user}} login_password={{postgres_login_password}}
+    when: createDB
