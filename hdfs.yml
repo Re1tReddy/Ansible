@@ -1,6 +1,7 @@
 ##
 # Ansible playbook To Create HDFS Directories.
 #/Users/revanthreddy/Desktop/Notes/ansible/hdfs.yml 
+#ansible-playbook /Users/revanthreddy/Desktop/Notes/ansible/hdfs.yml --start-at-task="Copy local files"
 
 ---
 - name: Create HDFS Directories
@@ -33,3 +34,9 @@
     - name: Change permissions of temp directory
       command: hadoop fs -chmod 777 /tmp
       become_user: hdfs
+    - name: Copy files to HDFS
+      command: hadoop fs -put /opt/logs/  /user/centos
+      become_user: hdfs
+    - name: Copy files local 
+      copy: src=/opt/gobblin/logs/gobblin-gc.log dest=/opt/gobblin
+      become_user: true
