@@ -1,0 +1,20 @@
+
+- name: delete installation directory if it exist
+  file: path={{artifactory_installation_dir}} state=absent
+
+- name: create directory for installation
+  file: path={{ artifactory_installation_dir }} state=directory
+  
+- name: download artifactory
+  unarchive: copy=no src={{ artifactory_url }} dest={{ artifactory_installation_dir }} validate_certs=no
+  retries: 3
+
+- name: move artifactory 
+  command: mv {{ artifactory_installation_dir }}/{{artifactory_file}} {{artifactory_home}}
+
+- name: configuring the filestore
+  template:
+    src: binarystore.xml
+    dest: "{{ artifactory_home }}/etc/binarystore.xml"
+    mode: 0644
+ 

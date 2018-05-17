@@ -1,0 +1,27 @@
+---
+- name: install wget
+  yum:
+    name: wget
+    state: present
+- name: install unzip
+  yum:
+    name: unzip
+    state: present
+
+- name: Download Java
+  command: "wget -q -O {{java_archive}} --no-check-certificate --no-cookies --header 'Cookie: oraclelicense=accept-securebackup-cookie' {{java_download_url}} creates={{java_archive}}"
+
+- name: Unpack archive
+  command: "tar -zxf {{java_archive}} -C {{download_folder}} creates={{java_name}}"
+
+- name: Fix ownership
+  file: state=directory path={{java_name}} owner=root group=root recurse=yes
+
+- name: Make Java available for system
+  command: 'alternatives --install "/usr/bin/java" "java" "{{java_name}}/bin/java" 2000'
+
+- name: Clean up
+  file: state=absent path={{java_archive}}
+
+- name: Copy java.sh file to profile
+  template: src="templates/java/java.sh.j2" dest="/etc/profile.d/java.sh"

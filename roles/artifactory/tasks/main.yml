@@ -1,0 +1,14 @@
+
+- name: install java
+  include: install-java.yml
+
+- name: install artifactory
+  include: install-artifactory.yml
+
+- name: configure postgres db
+  include: install-postgresql.yml
+
+- name: start artifactory service
+  shell: nohup ./artifactory.sh &
+  args:
+    chdir: "{{artifactory_home}}/bin"

@@ -1,0 +1,16 @@
+##
+# Ansible playbook to install new Jfrog artifactory
+#cd /Users/revanthreddy/Desktop/Notes/ansible/ 
+#ansible-playbook /Users/revanthreddy/Desktop/Notes/ansible/install-artifactory.yml
+
+---  
+- name: Install new Jfrog artifactory
+  remote_user: revanthreddy
+  become: true
+  hosts: localhost
+  vars:
+    download_url: "https://api.bintray.com/content/jfrog/artifactory/jfrog-artifactory-oss-$latest.zip;bt_package=jfrog-artifactory-oss-zip"
+    artifactory_version: "5.11.0"
+  roles: 
+    - artifactory
+    

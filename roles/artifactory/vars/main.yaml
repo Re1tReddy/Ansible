@@ -1,0 +1,18 @@
+download_folder: /opt
+java_name: "{{download_folder}}/jdk{{java_version}}"
+
+artifactory_license: oss
+artifactory_dbname: artifactory
+artifactory_username: admin
+artifactory_password: password
+
+artifactory_url: {{ download_url }}
+artifactory_file: "artifactory-{{artifactory_license}}-{{ artifactory_version }}"
+artifactory_home: "/opt/jfrog/artifactory"
+artifactory_installation_dir: "/opt/jfrog"
+
+postgres_jdbc_jar: "http://jdbc.postgresql.org/download/postgresql-9.3-1102.jdbc4.jar"
+port: 5432
+postgres_login_user: revanthreddy
+postgres_login_password: admin
+postgres_host: localhost
